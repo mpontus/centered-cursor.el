@@ -32,7 +32,7 @@
 ;;; Code:
 
 (defun centered-cursor-recenter ()
-  (ignore-errors
+   (ignore-errors
     (if (function-get this-command 'scroll-command)
         (move-to-window-line nil))
     (recenter (save-excursion
@@ -47,8 +47,8 @@
   nil nil nil
   (if centered-cursor-mode
       (progn
-        (add-hook 'pre-command-hook #'centered-cursor-pre-command nil 'local))
-    (remove-hook 'pre-command-hook #'centered-cursor-pre-command 'local)))
+        (add-hook 'post-command-hook #'centered-cursor-recenter nil 'local))
+    (remove-hook 'post-command-hook #'centered-cursor-recenter 'local)))
 
 (define-global-minor-mode global-centered-cursor-mode
     centered-cursor-mode centered-cursor-mode)
