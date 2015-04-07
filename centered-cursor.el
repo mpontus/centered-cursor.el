@@ -41,6 +41,7 @@
     (if (function-get this-command 'scroll-command)
         (move-to-window-line nil))))
 
+;;;###autoload
 (define-minor-mode centered-cursor-mode
     "Center cursor within window restricted to buffer boundaries."
   nil nil nil
