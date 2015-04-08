@@ -50,6 +50,7 @@
         (add-hook 'post-command-hook #'centered-cursor-recenter nil 'local))
     (remove-hook 'post-command-hook #'centered-cursor-recenter 'local)))
 
+;;;###autoload
 (define-global-minor-mode global-centered-cursor-mode
     centered-cursor-mode centered-cursor-mode)
 
