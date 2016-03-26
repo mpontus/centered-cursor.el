@@ -1,4 +1,4 @@
-;;; centered-cursor.el --- recenter window and cursor automatically -*- lexical-binding: t; -*-
+;;; centered-cursor.el --- recenter cursor automatically -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015  Michael Pontus
 
@@ -31,28 +31,38 @@
 
 ;;; Code:
 
-(defun centered-cursor-recenter ()
-   (ignore-errors
-    (if (function-get this-command 'scroll-command)
-        (move-to-window-line nil))
-    (recenter (save-excursion
-                (- (1+ (vertical-motion
-                        (floor (window-screen-lines) 2))))))
-    (if (function-get this-command 'scroll-command)
-        (move-to-window-line nil))))
-
 ;;;###autoload
 (define-minor-mode centered-cursor-mode
-    "Center cursor within window restricted to buffer boundaries."
-  nil nil nil
-  (if centered-cursor-mode
-      (progn
-        (add-hook 'post-command-hook #'centered-cursor-recenter nil 'local))
-    (remove-hook 'post-command-hook #'centered-cursor-recenter 'local)))
+    "Center cursor within window restricted to buffer boundaries." nil nil nil
+    (if centered-cursor-mode
+        (add-hook 'post-command-hook #'centered-cursor-recenter nil 'local)
+      (remove-hook 'post-command-hook #'centered-cursor-recenter 'local)))
 
 ;;;###autoload
 (define-global-minor-mode global-centered-cursor-mode
     centered-cursor-mode centered-cursor-mode)
+
+(defun centered-cursor-recenter ()
+  "Center the point while keeping window within buffer contents."
+  ;; Fixes `scroll-up-command' <C-v>, `scroll-bottom-command' <M-v>
+  ;;  
+  ;; Reposition the cursor to the center of scrolled window
+  (if (function-get this-command 'scroll-command)
+      (move-to-window-line nil))
+
+  (let* ((window-lines-int (round (window-screen-lines)))
+         (middle-line-index (floor window-lines-int 2))
+         ;; Number of lines from window bottom
+         (negative-index (- window-lines-int middle-line-index))
+         ;; min of the above and number of lines till EOB
+         (adjusted-for-eob (1+ (save-excursion
+                                 (vertical-motion
+                                  (1- negative-index))))))
+    (recenter (- adjusted-for-eob)))
+  
+  ;; Reposition cursor again after adjusting to end of buffer
+  (if (function-get this-command 'scroll-command)
+      (move-to-window-line nil)))
 
 (provide 'centered-cursor)
 ;;; centered-cursor.el ends here
