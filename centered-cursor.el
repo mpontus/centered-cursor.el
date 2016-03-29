@@ -49,5 +49,15 @@
         (move-to-window-line middle-line))
     (recenter middle-line)))
 
+(defun centered-cursor-mode-enable ()
+  (interactive)
+  (centered-cursor-mode +1))
+
+(defun centered-cursor-mode-disable ()
+  (interactive)
+  (centered-cursor-mode -1))
+
+(add-hook 'comint-mode-hook 'centered-cursor-mode)
+
 (provide 'centered-cursor)
 ;;; centered-cursor.el ends here
