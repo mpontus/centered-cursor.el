@@ -45,8 +45,8 @@
 (defun centered-cursor-recenter ()
   "Center the point while keeping window within buffer contents."
   (let ((middle-line (ceiling (/ (window-screen-lines) 2))))
-    (if (function-get this-command 'scroll-command)
-        (move-to-window-line middle-line))
+    (when (function-get this-command 'scroll-command)
+      (move-to-window-line middle-line))
     (recenter middle-line)))
 
 (defun centered-cursor-mode-enable ()
@@ -56,8 +56,6 @@
 (defun centered-cursor-mode-disable ()
   (interactive)
   (centered-cursor-mode -1))
-
-(add-hook 'comint-mode-hook 'centered-cursor-mode)
 
 (provide 'centered-cursor)
 ;;; centered-cursor.el ends here

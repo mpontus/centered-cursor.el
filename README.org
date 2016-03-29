@@ -7,7 +7,7 @@ This package provides ~centered-cursor-mode~ which keeps the point on the middle
 Use following block of code to activate mode globally:
 
 #+begin_src emacs-lisp
-(global-centered-cursor-mode)
+(global-centered-cursor-mode +1)
 #+end_src
 
 Make sure to toggle the mode (off) for buffers where you don't wish automatic re-centering to occur: 
