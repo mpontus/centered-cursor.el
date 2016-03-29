@@ -44,25 +44,9 @@
 
 (defun centered-cursor-recenter ()
   "Center the point while keeping window within buffer contents."
-  ;; Fixes `scroll-up-command' <C-v>, `scroll-bottom-command' <M-v>
-  ;;  
-  ;; Reposition the cursor to the center of scrolled window
   (if (function-get this-command 'scroll-command)
-      (move-to-window-line nil))
-
-  (let* ((window-lines-int (round (window-screen-lines)))
-         (middle-line-index (floor window-lines-int 2))
-         ;; Number of lines from window bottom
-         (negative-index (- window-lines-int middle-line-index))
-         ;; min of the above and number of lines till EOB
-         (adjusted-for-eob (1+ (save-excursion
-                                 (vertical-motion
-                                  (1- negative-index))))))
-    (recenter (- adjusted-for-eob)))
-  
-  ;; Reposition cursor again after adjusting to end of buffer
-  (if (function-get this-command 'scroll-command)
-      (move-to-window-line nil)))
+      (move-to-window-line nil)
+      (recenter nil)))
 
 (provide 'centered-cursor)
 ;;; centered-cursor.el ends here
