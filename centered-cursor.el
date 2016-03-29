@@ -45,16 +45,21 @@
 (defun centered-cursor-recenter ()
   "Center the point while keeping window within buffer contents."
   (let ((middle-line (ceiling (/ (window-screen-lines) 2))))
+    ;; scroll-commands such as <C-v>, <M-v> change the window scroll
+    ;; and only move cursor by side effect.
+    ;;
+    ;; To ensure that cursor stays remains centered we need to change
+    ;; its position and recenter in case it stopped on EOB.
     (when (function-get this-command 'scroll-command)
       (move-to-window-line middle-line))
     (recenter middle-line)))
 
-(defun centered-cursor-mode-enable ()
-  (interactive)
-  (centered-cursor-mode +1))
+(defun turn-on-centered-cursor ()
+  "Unconditionally turn on Centered Cursor mode."
+  (centered-cursor-mode 1))
 
-(defun centered-cursor-mode-disable ()
-  (interactive)
+(defun turn-offcentered ()
+  "Unconditionally turn off Centered Cursor mode."
   (centered-cursor-mode -1))
 
 (provide 'centered-cursor)
