@@ -10,7 +10,7 @@ Use following block of code to activate mode globally:
 (global-centered-cursor-mode +1)
 #+end_src
 
-Make sure to toggle the mode (off) for buffers where you don't wish automatic re-centering to occur: 
+Make sure to disable the mode for buffers where you don't wish automatic re-centering to occur: 
 
 #+begin_src emacs-lisp
 (add-hook 'comint-mode-hook #'centered-cursor-disable)
